@@ -1,0 +1,19 @@
+
+  # Implement me
+  model {
+    
+    za ~ dbin( thetaA, length(a) )
+    zb ~ dbin( thetaB, length(b) )
+    zc ~ dbin( thetaC, length(c) )
+
+    thetaA ~ dbeta( omega * (kappa - 2) + 1, (1 - omega) * (kappa - 2) + 1))
+    thetaB[i] ~ dbeta( omega * (kappa - 2) + 1, (1 - omega) * (kappa - 2) + 1)
+    thetaC[i] ~ dbeta( 10, 10 )
+    
+    omega ~ dbeta(10 , 10) # broad uniform
+
+    kappaMinusTwo ~ dgamma( 0.01, 0.01 )
+
+    kappa = kappaMinusTwo + 2
+  }
+  

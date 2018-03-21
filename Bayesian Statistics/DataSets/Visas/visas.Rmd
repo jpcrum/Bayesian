@@ -1,0 +1,56 @@
+---
+title: "Visas"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setwd("C:/Users/sjcrum/Documents/Bayesian Statistics/DataSets/Visas")
+```
+
+```{r}
+visa <- read.csv("us_perm_visas.csv")
+```
+
+```{r}
+visa <- visa[, colMeans(is.na(visa)) <= .15] 
+```
+
+
+```{r}
+#library(dplyr)
+
+payUnit <- visa %>% group_by(pw_unit_of_pay_9089) %>% summarise(Total = n()) %>% arrange(desc(Total))
+
+payUnit
+```
+
+
+```{r}
+index <- which(visa$pw_unit_of_pay_9089 == "yr")
+visa[index, 'pw_unit_of_pay_9089'] <- "Year"
+
+visa <- visa[visa$pw_unit_of_pay_9089 == "Year", ]
+```
+
+
+```{r}
+#library(ggplot2)
+
+visa$wage_offer_from_9089 <- as.numeric(visa$wage_offer_from_9089)
+
+qplot(visa$wage_offer_from_9089,
+      geom="histogram",
+      binwidth = 500,  
+      main = "Histogram for Age", 
+      xlab = "Age",  
+      fill=I("blue"), 
+      col=I("red"), 
+      alpha=I(.2),
+      xlim=c(20,50))
+```
+
+

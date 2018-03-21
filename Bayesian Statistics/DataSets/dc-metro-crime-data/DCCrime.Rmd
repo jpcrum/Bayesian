@@ -1,0 +1,63 @@
+---
+title: "DC Crime"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setwd("C:/Users/sjcrum/Documents/Bayesian Statistics/DataSets/dc-metro-crime-data")
+```
+
+```{r}
+df <- read.csv("dcCrime.csv")
+```
+
+```{r}
+vars1 <- c("SHIFT", "OFFENSE", "month", "year", "quad", "crimetype")
+df1 <- df[vars1]
+```
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+```
+
+
+```{r}
+crime_year <- df1 %>% group_by(OFFENSE, year) %>% summarise(n = n()) %>% arrange(year)
+crime_year
+```
+
+```{r}
+install.packages("zoo")
+library(zoo)
+```
+
+
+```{r}
+df1$monthYear <- as.yearmon(paste(df1$year, df1$month), "%Y %m")
+crime_month <- df1 %>% group_by(OFFENSE, monthYear) %>% summarise(n = n()) %>% arrange(monthYear)
+```
+
+
+
+
+```{r}
+library(ggplot2)
+```
+
+
+
+```{r}
+counts <- table(crime_year$OFFENSE, crime_year$year)
+ggplot(crime_year, aes(year, n, col = OFFENSE)) + geom_line()
+```
+
+```{r}
+counts <- table(crime_month$OFFENSE, crime_month$monthYear)
+ggplot(crime_month, aes(monthYear, n, col = OFFENSE)) + geom_line()
+```
+
